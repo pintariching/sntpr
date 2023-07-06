@@ -1,8 +1,8 @@
 use std::mem;
 use std::net::UdpSocket;
-use std::time::Duration;
+use std::time::{Duration, Instant, SystemTime};
 
-use chrono::{DateTime, NaiveDateTime};
+mod packet;
 
 const SNTP_TIME_OFFSET: u32 = 2_208_988_800;
 const SNTP_PACKET_SIZE: usize = 48;
@@ -56,10 +56,6 @@ pub fn request() {
             let frac = read_be_u32(&packet[44..48]);
 
             println!("{secs}.{frac}");
-
-            let timestamp = NaiveDateTime::from_timestamp_opt(secs.into(), frac).unwrap();
-
-            println!("Time is: {timestamp}")
         }
         Err(e) => println!("{}", e),
     }
